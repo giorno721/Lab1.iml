@@ -327,7 +327,8 @@ aside{
 }
 @media screen and (max-width: 1200px) {
     .table-container{
-        width: 100%;
+        width: 90%;
+        margin-left: 20px;
     }
 }
 
@@ -350,7 +351,8 @@ aside{
         display: none;
     }
     .table-container{
-        width: 100%;
+        width: 90%;
+        margin-left: 20px;
     }
     .logo{
         left: 40%;
@@ -361,5 +363,6 @@ aside{
     #NotificationDropDownMenu{
         right: 5px;
     }
+
 
 }
