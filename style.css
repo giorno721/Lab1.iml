@@ -1,0 +1,224 @@
+.header-students{
+    font-weight: bold;
+    font-size: 35px;
+    letter-spacing: 3px;
+}
+aside{
+    width: 15%;
+    float: left;
+    margin-left: 30px;
+    font-size: 25px;
+    line-height: 1.8;
+    letter-spacing: 1px;
+}
+.table-container{
+    overflow: auto;
+    width: 80%
+}
+.content-table{
+    margin-top: 1px;
+    font-size: 20px;
+    width: 100%;
+    border-radius: 5px 5px 5px 5px;
+    overflow: auto;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    border-collapse: collapse;
+}
+.content-table caption {
+    display: table-caption;
+    text-align: right;
+}
+.content-table thead tr {
+    background-color: #1bf798;
+    color: #ffffff;
+    text-align: left;
+    font-weight: bold;
+}
+.content-table th,
+.content-table td {
+        padding: 15px 15px;
+        text-align: center;
+    /*border-collapse: collapse;*/
+    /*border: 1px solid gray;*/
+}
+.no-styles{
+    background-color: white;
+}
+.content-table tbody tr {
+    border-bottom: 2px solid #dddddd;
+}
+.notification-icon {
+    position: relative;
+    top: 5px;
+}
+
+.bi-circle-fill {
+    font-size: 30px;
+    color: #00a82d;
+    position: absolute;
+}
+#icon-filled-circle{
+    position: inherit;
+}
+#notification-circle {
+    color: red;
+    font-size: 8px;
+    top: 7px;
+    left: 22px; /* Adjust the left position as needed */
+    animation: pulse 1.2s infinite alternate;
+}
+@keyframes pulse {
+    0% {
+        transform: scale(0);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+.bi-circle{
+    font-size: 30px;
+    color: inherit
+}
+.bi-pencil-square{
+    margin: 10px;
+    font-size: 30px;
+    color: inherit;
+}
+.bi-x-square{
+    font-size: 30px;
+    color: inherit;
+}
+.bi-plus-square{
+    font-size: 30px;
+}
+.no-decoration {
+    text-decoration: none;
+    color: inherit; /* Use the same color as the parent element */
+}
+
+/* Define link styles for different states */
+.no-decoration:hover {
+    color: inherit; /* Keep the same color on hover */
+}
+
+.no-decoration:active {
+    color: inherit; /* Keep the same color when active (clicked) */
+}
+.img-profile{
+    width: 30px;
+    position: inherit;
+}
+.navbar.navbar-inverse {
+    background-color: #1bf798; /* Background color */
+    border: none; /* Remove border */
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1); /* Add shadow */
+    height: 60px;
+}
+
+.navbar.navbar-inverse .navbar-brand {
+    color: black; /* Brand text color */
+    font-family: 'Roboto', sans-serif; /* Use Roboto font */
+    font-weight: bold;
+    font-size:35px;
+    letter-spacing: 10px; /* Add space between letters */
+    transition: all 0.3s ease; /* Smooth transition */
+}
+.navbar-brand {
+    position: absolute;
+    left: 50%;
+    transform: translateY(-10%);
+}
+.navbar.navbar-inverse .navbar-brand:hover {
+    color: #555; /* Change color on hover */
+    transform: scale(1.3); /* Scale effect on hover */
+}
+.navbar.navbar-inverse .navbar-brand:hover,
+.navbar.navbar-inverse .navbar-brand:focus {
+    color: black; /* Brand text color on hover/focus */
+}
+
+.navbar.navbar-inverse .navbar-nav > li > a {
+    color: black; /* Nav links color */
+    font-weight: bold;
+}
+
+.navbar.navbar-inverse .navbar-nav > li > a:hover,
+.navbar.navbar-inverse .navbar-nav > li > a:focus {
+    color: #fff; /* Nav links color on hover/focus */
+    background-color: rgba(255, 255, 255, 0.1); /* Nav links background color on hover/focus */
+}
+
+.navbar.navbar-inverse .navbar-toggle {
+    border-color: #fff; /* Navbar toggle button color */
+}
+
+.navbar.navbar-inverse .navbar-toggle:hover,
+.navbar.navbar-inverse .navbar-toggle:focus {
+    background-color: #fff; /* Navbar toggle button background color on hover/focus */
+}
+
+.navbar.navbar-inverse .navbar-toggle .icon-bar {
+    background-color: #fff; /* Navbar toggle icon color */
+}
+.hidden-lg{
+    display: inline-block;
+    margin: 0 0 0 -1em;
+}
+.btn-custom-color {
+    background-color: #1bf798;
+    border-color: #1bf798;
+    color: black; /* Колір тексту */
+}
+.bi-list{
+    font-size: 30px;
+    transition: transform 0.3s ease;
+}
+.btn-custom-color:hover {
+    background-color: #16d38a; /* Колір при наведенні */
+    border-color: #16d38a; /* Колір рамки при наведенні */
+    transform: scale(1.3); /* Збільшити масштаб елементу при наведенні */
+}
+.btn-group.btn-group-justified {
+    display: flex;
+    justify-content: space-between;
+    max-width: 600px; /* Adjust the max-width as needed */
+    margin: 0 auto; /* Center the button group */
+}
+
+.btn-group.btn-group-justified {
+    display: flex;
+    justify-content: space-between;
+    max-width: 300px; /* Adjust the max-width as needed */
+    margin: 0 auto; /* Center the button group */
+}
+
+.btn-group.btn-group-justified .btn {
+    background-color: white; /* Button background color */
+    color: black; /* Button text color */
+    border: 2px solid black; /* Add border */
+    border-radius: 10px; /* Add border radius */
+    padding: 10px 20px; /* Adjust padding */
+    margin: 0 5px; /* Adjust margin between buttons */
+    font-size: 25px; /* Button text size */
+    text-align: center; /* Center button text */
+    text-decoration: none; /* Remove underline */
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+.btn-group.btn-group-justified .btn:hover {
+    background-color: #f0f0f0; /* Background color on hover */
+}
+.container-fluid{
+
+}
+@media screen and (max-width: 1200px) {
+    .table-container{
+        width: 100%;
+    }
+}
+@media screen and (max-width: 768px) {
+    .table-container{
+        width: 100%;
+    }
+}
+
