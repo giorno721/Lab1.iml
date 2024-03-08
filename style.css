@@ -7,11 +7,10 @@
 .navbar {
     background-color: #99afff;
     display: flex;
-    height: 60px;
-    align-items: center;
-}
+    height: 60px;}
 .logo{
     position: absolute;
+    transition: 0.3s;
     left: 50%;
     transform: translateY(-10%);
     font-size: 35px;
@@ -22,11 +21,15 @@
 }
 .navBarButton {
     padding: 5px;
-    border-radius: 3px;
+    border-radius: 10px;
     cursor: pointer;
 }
 .navBarButton:hover{
     background-color: rgb(105, 105, 105);
+}
+.img-profile{
+    width: 30px;
+    float: left;
 }
 .right {
     margin-left: auto;
@@ -36,6 +39,7 @@
 .CMSLogo{
     color: black;
     float: left;
+    text-decoration: none;
     font-weight: bold;
 }
 .CMSLogo:hover{
@@ -44,83 +48,135 @@
 }
 .bi-bell::before{
     font-size: 30px;
-}
-.img-profile{
-    width: 30px;
-    position: inherit;
+    color: black;
 }
 #NameLabel
 {
     font-size: 22px;
     align-self: center;
-}
-#profileDropDownMenu{
-    position: absolute;
-    border: black 1px solid;
-    background: white;
-    height: 75px;
-    width: 100px;
-    display: none;
     font-weight: bold;
 }
-.profile:hover #profileDropDownMenu{
+
+#profileDropDownMenu{
+    display: none;
+    top: 85%;
+    position: absolute;
+    width: 100%; /* Adjust width as needed */
+    background-color: #fff; /* Background color */
+    border: 1px solid #ccc; /* Border */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Shadow */
+    z-index: 1000; /* Ensure it appears above other content */
+}
+
+/* Style for each profile item */
+#profileDropDownMenu ul li {
+    list-style: none;
+    padding: 2px;
+    border-bottom: 1px solid #eee; /* Separator between items */
+}
+#profileDropDownMenu ol, ul {
+    padding-left: 1em;
+}
+/* Style for profile button */
+#profileDropDownMenu ul li button {
+    background: none;
+    border: 1px solid #ccc; /* Border for button */
+    border-radius: 5px; /* Rounded corners for button */
+    cursor: pointer;
+    font-size: 17px; /* Adjust font size */
+    color: #333; /* Text color */
+    padding: 8px; /* Add padding to separate text from border */
+}
+
+/* Style for profile button on hover */
+#profileDropDownMenu ul li button:hover {
+    background-color: #f5f5f5; /* Background color on hover */
+}
+
+/* Show the dropdown menu when hovering over the profile icon */
+.profile:hover #profileDropDownMenu {
     display: block;
 }
-#profileDropDownMenu ul {
-    height: 100%;
-}
-#profileDropDownMenu ul li{
-    position: relative;
-    width: 100%;
-    height: 50%;
-}
-#profileDropDownMenu ul li button{
-    position: relative;
-    width: 100%;
-    height: 100%;
-    border: 1px solid hsl(0, 0%, 61%);
-    background: hsl(0, 0%, 100%);
-}
-#profileDropDownMenu ul li:hover button{
-    background: hsl(0, 0%, 71%);
-}
-#NotificationDropDownMenu{
-    background: white;
-    position: absolute;
-    border: black 2px solid;
-    margin-top: 3px;
+
+/* Notification dropdown menu container */
+#NotificationDropDownMenu {
     display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 200px; /* Adjust width as needed */
+    background-color: #fff; /* Background color */
+    border: 1px solid #ccc; /* Border */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Shadow */
+    z-index: 1000; /* Ensure it appears above other content */
 }
-#NotificationDropDownMenu ul li{
-    border: black 1px solid;
-    background: hsl(0, 0%, 100%);
+
+/* Style for each notification item */
+#NotificationDropDownMenu ul li {
+    list-style: none;
+    padding: 5px;
+    border-bottom: 1px solid #eee; /* Separator between items */
 }
-#NotificationDropDownMenu ul li:hover{
-    background: hsl(0, 0%, 71%);
+
+/* Style for notification image */
+.img-notif {
+    width: 40px; /* Adjust width as needed */
+    height: auto; /* Maintain aspect ratio */
+    display: inline-block;
+    margin-right: 10px; /* Spacing between image and text */
 }
-.notification:hover #NotificationDropDownMenu{
+
+/* Style for notification text */
+#NotificationDropDownMenu ul li button {
+    background: none;
+    border: 1px solid #ccc; /* Border for text */
+    border-radius: 5px; /* Rounded corners for text */
+    cursor: pointer;
+    font-size: 14px; /* Adjust font size */
+    color: #333; /* Text color */
+    margin-top: 5px;
+    padding: 8px; /* Add padding to separate text from border */
+}
+
+/* Style for notification text on hover */
+#NotificationDropDownMenu ul li button:hover {
+    background-color: #f5f5f5; /* Background color on hover */
+}
+/* Show the dropdown menu when hovering over the notification icon */
+.notification:hover #NotificationDropDownMenu {
     display: block;
 }
 
 .header-students{
+    display: inline-block;
     font-weight: bold;
+    margin-top: 20px;
     font-size: 35px;
     letter-spacing: 3px;
 }
-aside{
+.sidebar{
     width: 15%;
     float: left;
+    margin-top: 25px;
     margin-left: 30px;
     font-size: 25px;
     line-height: 1.8;
     letter-spacing: 1px;
+}
+.nav-link{
+    color: black;
+    font-size: 25px;
+}
+table {
+    caption-side: top;
 }
 .table-container{
     overflow: auto;
     width: 80%
 }
 .content-table{
-    margin-top: 1px;
     font-size: 20px;
     width: 100%;
     border-radius: 5px 5px 5px 5px;
@@ -143,7 +199,6 @@ aside{
     padding: 15px 15px;
     text-align: center;
     white-space: nowrap;
-    /*border-collapse: collapse;*/
     /*border: 1px solid gray;*/
 }
 .no-styles{
@@ -159,11 +214,21 @@ aside{
 
 .bi-circle-fill {
     font-size: 30px;
+    position: absolute;
+}
+.bi-circle-not-fill{
+    font-size: 30px;
     color: #00a82d;
     position: absolute;
 }
 #icon-filled-circle{
     position: inherit;
+    color: #00a82d;
+
+}
+#icon-not-filled-circle{
+    position: inherit;
+    color: #cccccc;
 }
 .notification {
     position: relative;
@@ -215,120 +280,31 @@ aside{
 .no-decoration:active {
     color: inherit; /* Keep the same color when active (clicked) */
 }
-.hidden-lg{
-    display: inline-block;
-    margin: 0 0 0 -1em;
-}
-.btn-custom-color {
-    background-color: #1bf798;
-    border-color: #1bf798;
-    color: black; /* Колір тексту */
+.open { display: flex !important;
+    position: absolute; z-index: 100 }
+.burger-menu{
+    display: none;
 }
 .bi-list{
+    font-size: 28px;
+}
+.bi-x{
     font-size: 30px;
-    transition: transform 0.3s ease;
 }
-.btn-custom-color:hover {
-    background-color: #16d38a; /* Колір при наведенні */
-    border-color: #16d38a; /* Колір рамки при наведенні */
-    transform: scale(1.3); /* Збільшити масштаб елементу при наведенні */
-}
-.pager{
-    font-size: 25px;
-}
-.container-fluid{
-}
-.menuButton {
-    display: flex;
-    align-items: center;
-    position: relative;
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-    z-index: 1;
-}
-.menuButton > span,
-.menuButton > span::before,
-.menuButton > span::after {
-    display: block;
-    position: absolute;
-    width: 100%;
-    height: 2px;
-    background-color: #616161;
-}
-.menuButton > span::before {
-    content: '';
-    top: -8px;
-}
-.menuButton > span::after {
-    content: '';
-    top: 8px;
-}
-.MenuBox {
-    display: block;
-    position: fixed;
-    visibility: hidden;
-    top: 0;
-    left: -100%;
-    width: 300px;
-    height: 100%;
-    margin: 0;
-    padding: 80px 0;
-    list-style: none;
-    text-align: center;
-    background-color: #ECEFF1;
-    box-shadow: 1px 0 6px rgba(0, 0, 0, .2);
-}
-.MenuBox{
-    width: 40%;
-}
-.MenuItem {
-    display: block;
-    padding: 12px 24px;
-    color: #333;
-    font-family: 'Roboto', sans-serif;
+
+.page-link{
     font-size: 20px;
-    font-weight: 600;
-    text-decoration: none;
-}
-.MenuItem:hover {
-    background-color: #CFD8DC;
-}
-#menuToggle:checked ~ .menuButton > span {
-    transform: rotate(45deg);
-}
-#menuToggle:checked ~ .menuButton > span::before {
-    top: 0;
-    transform: rotate(0);
-}
-#menuToggle:checked ~ .menuButton > span::after {
-    top: 0;
-    transform: rotate(90deg);
-}
-#menuToggle:checked ~ .MenuBox {
-    visibility: visible;
-    left: 0;
-}
-.menuButton > span,
-.menuButton > span::before,
-.menuButton > span::after {
-    transition-duration: .25s;
-}
-.MenuBox {
-    transition-duration: .25s;
-}
-.MenuItem {
-    transition-duration: .25s;
-}
-#menuToggle[type="checkbox"] {
-    -webkit-appearance: none; /* Safari/Chrome */
-    -moz-appearance: none; /* Firefox */
-    appearance: none;
 }
 @media screen and (max-width: 1200px) {
     .table-container{
         width: 90%;
         margin-left: 20px;
+    }
+    .header-students{
+        margin-left: 20px;
+    }
+    .sidebar{
+        display: none;
     }
 }
 
@@ -343,6 +319,9 @@ aside{
 @media (max-width: 768px) {
     .LargeScreenMenu{
         display: none;
+    }
+    .header-students{
+        margin-left: 20px;
     }
     .HamburgerMenu{
         display: flex;
@@ -359,10 +338,51 @@ aside{
     }
     #profileDropDownMenu{
         right: 5px;
+        width: 120px;
     }
-    #NotificationDropDownMenu{
-        right: 5px;
+    .notification:hover #NotificationDropDownMenu {
+        display: none;
     }
 
+    .burger-menu{
+        display: initial;
+    }
+    .sidebar {
+        display: none;
+        height: 100%;
+        margin-left: 0;
+        margin-top: 0;
+        width: 50%; /* Adjust the width as needed */
+        background-color:white; /* Background color */
+        border-bottom-right-radius: 10px;
+        border-top-right-radius: 10px;
+        border: 1px solid black;
+        padding: 20px; /* Padding inside the sidebar */
+    }
+
+    .sidebar ul {
+        list-style: none; /* Remove default list styles */
+        padding: 0;
+    }
+
+    .sidebar ul li {
+        margin-bottom: 10px; /* Spacing between list items */
+    }
+
+    .sidebar ul li a {
+        color: black; /* Link text color */
+        text-decoration: none; /* Remove underline */
+    }
+
+    .sidebar ul li a:hover {
+        text-decoration: underline; /* Underline on hover */
+    }
+
+    .logo:hover {
+        transform: none;
+    }
+    .logo {
+        transform: none;
+    }
 
 }

@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <td>Roman Marushko</td>
             <td>M</td>
             <td>18.02.2005</td>
-            <td><i class="bi bi-circle"></i></td>
+             <td><i class="bi bi-circle-fill" id="icon-not-filled-circle"> </i> </td>
             <td><a href="Edit%20menu.html" class="bi bi-pencil-square"></a><a class="bi bi-x-square"></a></td>
         `;
 
@@ -43,4 +43,16 @@ document.addEventListener('DOMContentLoaded', function() {
             row.parentNode.removeChild(row);
         }
     });
+});
+document.querySelector('.burger-menu').addEventListener('click', function() {
+    this.classList.toggle('active');
+    let icon = document.querySelector('.burger-menu i');
+    if (icon.classList.contains('bi-list')) {
+        icon.classList.remove('bi-list');
+        icon.classList.add('bi-x');
+    } else {
+        icon.classList.remove('bi-x');
+        icon.classList.add('bi-list');
+    }
+    document.querySelector('.sidebar').classList.toggle('open');
 });
