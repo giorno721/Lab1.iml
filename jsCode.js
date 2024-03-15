@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <td>Roman Marushko</td>
             <td>M</td>
             <td>18.02.2005</td>
-             <td><i class="bi bi-circle-fill" id="icon-not-filled-circle"> </i> </td>
+             <td><i class="bi bi-circle-fill" id="icon"> </i> </td>
             <td><a href="Edit%20menu.html" class="bi bi-pencil-square"></a><a class="bi bi-x-square"></a></td>
         `;
 

@@ -221,12 +221,12 @@ table {
     color: #00a82d;
     position: absolute;
 }
-#icon-filled-circle{
+#icon-active{
     position: inherit;
     color: #00a82d;
 
 }
-#icon-not-filled-circle{
+#icon{
     position: inherit;
     color: #cccccc;
 }
