@@ -23,8 +23,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const inactiveRadio = document.getElementById('inactiveRadio');
     const tableBody = document.querySelector('.content-table tbody');
     const formFields = [groupSelect, nameInput, genderSelect, birthdateInput];
+    const deleteConfirmationModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
+    const confirmDeleteStudentBtn = document.getElementById('confirmDeleteStudent');
+
     let editingMode = false;
     let editedRowIndex = null;
+    let rowToDelete = null; // Зберігаємо посилання на запис, який користувач хоче видалити
+
     const modal = new bootstrap.Modal(document.getElementById('AddStudentModalWindow')); // Отримуємо модальне вікно
 
     modal._element.addEventListener('hidden.bs.modal', function (){
@@ -42,6 +47,28 @@ document.addEventListener('DOMContentLoaded', function () {
         const year = date.getFullYear();
         return `${day}.${month}.${year}`;
     }
+    // Додайте обробник подій для кнопки видалення студента
+    document.querySelector('.content-table tbody').addEventListener('click', function(event) {
+        const target = event.target;
+        if (target.classList.contains('bi-x-square')) {
+            const row = target.closest('tr');
+            if (row) {
+                rowToDelete = row;
+                const studentName = row.cells[2].textContent.trim(); // Отримуємо ім'я студента
+                const deleteConfirmationText = document.getElementById('deleteConfirmationText');
+                deleteConfirmationText.textContent = `Are you sure you want to delete the student ${studentName}?`; // Оновлюємо текст у модальному вікні
+                deleteConfirmationModal.show(); // Відображаємо модальне вікно для підтвердження видалення
+            }
+        }
+    });
+    // Додайте обробник подій для кнопки підтвердження видалення
+    confirmDeleteStudentBtn.addEventListener('click', function() {
+        if (rowToDelete) {
+            rowToDelete.remove(); // Видаляємо рядок з таблиці
+            deleteConfirmationModal.hide(); // Ховаємо модальне вікно
+            rowToDelete = null; // Скидаємо змінну
+        }
+    });
 
     // Обробник події для кнопки Add або Save Changes (залежно від контексту)
     addStudentBtn.addEventListener('click', function () {
