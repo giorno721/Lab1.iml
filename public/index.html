@@ -3,7 +3,7 @@
 <head>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>  <link rel="stylesheet" type="text/css" href="style.css">
   <link rel="manifest" href="/manifest.json">
   <meta content="width=device-width, initial-scale=1" name="viewport" />
   <title>Students</title>
@@ -61,7 +61,7 @@
   <div class="table-container">
     <table class="content-table">
       <caption>
-        <a id="addStudentButton" class="bi bi-circle bi-plus-square"></a>
+        <i class="bi bi-circle bi-plus-square"  data-bs-toggle="modal" data-bs-target="#AddStudentModalWindow"></i>
       </caption>
       <thead>
       <tr>
@@ -78,21 +78,21 @@
       <tbody>
       <tr>
         <td><label><input type="checkbox" checked></label></td>
-        <td>KN-21</td>
+        <td>PZ-25</td>
         <td>John Smith</td>
         <td>M</td>
         <td>11.05.2004</td>
         <td><i class="bi bi-circle-fill" id="icon-active"></i></td>
-        <td><a href="Edit%20menu.html" class="bi bi-pencil-square"></a><a class="bi bi-x-square"></a></td>
+        <td><i class="bi bi-pencil-square"></i><i class="bi bi-x-square"></i></td>
       </tr>
       <tr>
         <td><label><input type="checkbox"></label></td>
-        <td>KN-22</td>
+        <td>PZ-21</td>
         <td>Ann Bond</td>
         <td>F</td>
         <td>24.04.2004</td>
         <td><i class="bi bi-circle-fill" id="icon"> </i> </td>
-        <td><a href="Edit%20menu.html" class="bi bi-pencil-square"></a><a class="bi bi-x-square"></a></td>
+        <td><i class="bi bi-pencil-square"></i><i class="bi bi-x-square"></i></td>
       </tr>
       </tbody>
     </table>
@@ -116,7 +116,65 @@
     </li>
   </ul>
 </nav>
+<div class="modal fade" id="AddStudentModalWindow" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ModalTitle">Add student</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="groupSelect">Group</label>
+          <select class="form-select" id="groupSelect">
+            <option value="" disabled="" selected="" hidden="">Select the group</option>
+            <option value="PZ-21">PZ-21</option>
+            <option value="PZ-25">PZ-25</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="nameInput">Name</label>
+          <input type="text" class="form-control" id="nameInput" placeholder="Surname and name">
+        </div>
+        <div class="form-group">
+          <label for="genderSelect">Gender</label>
+          <select class="form-select" id="genderSelect">
+            <option value="" disabled="" selected="" hidden="">Choose the gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="birthdateInput">Birth date</label>
+          <input type="date" class="form-control" id="birthdateInput">
+        </div>
+        <div class="form-group">
+          <label>Статус</label>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="statusRadio" id="activeRadio" value="active" checked>
+            <label class="form-check-label" for="activeRadio">
+              Active
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="statusRadio" id="inactiveRadio" value="inactive">
+            <label class="form-check-label" for="inactiveRadio">
+              Inactive
+            </label>
+          </div>
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnClose">Close</button>
+        <button type="button" class="btn btn-primary" id="btnAddStudent">Add</button>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
+
 <script src="jsCode.js"></script>
 <script src="app.js"></script>
 </html>
