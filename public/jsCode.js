@@ -25,29 +25,20 @@ document.addEventListener('DOMContentLoaded', function () {
     const formFields = [groupSelect, nameInput, genderSelect, birthdateInput];
     const deleteConfirmationModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
     const confirmDeleteStudentBtn = document.getElementById('confirmDeleteStudent');
-
-    let isFormValid = false;
-    let editingMode = false;
-    let editedRowIndex = null;
-    let rowToDelete = null; // Зберігаємо посилання на запис, який користувач хоче видалити
-
     const modal = new bootstrap.Modal(document.getElementById('AddStudentModalWindow')); // Отримуємо модальне вікно
 
+    let editingMode = false;
+    let editedRowIndex = null;
+    let rowToDelete = null;
+
+    // Обробник подій для закриття модального вікна додавання/редагування
     modal._element.addEventListener('hidden.bs.modal', function (){
         titleModule.textContent = "Add student";
         addStudentBtn.textContent = "Add";
         ClearModalField();
-        editingMode = false; // При закритті модального вікна скидаємо режим редагування
+        editingMode = false;
         editedRowIndex = null;
     })
-    // Функція для форматування дати у вказаний формат
-    function formatDate(dateString) {
-        const date = new Date(dateString);
-        const day = date.getDate().toString().padStart(2, '0'); // Додаємо нуль спереду, якщо число менше 10
-        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Місяці в JavaScript починаються з 0
-        const year = date.getFullYear();
-        return `${day}.${month}.${year}`;
-    }
     // Додайте обробник подій для кнопки видалення студента
     document.querySelector('.content-table tbody').addEventListener('click', function(event) {
         const target = event.target;
@@ -107,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function () {
             modal.hide();
         } else {
             // If editing the first row, update its content directly
-            const editedRow = editedRowIndex=== 0 ? tableBody.querySelector('tr:first-child') : document.querySelector(`tr:nth-child(${editedRowIndex + 1})`);
+            const editedRow = editedRowIndex === 0 ? tableBody.querySelector('tr:first-child') : document.querySelector(`tr:nth-child(${editedRowIndex + 1})`);
             const cells = editedRow.querySelectorAll('td');
             cells[1].textContent = group;
             cells[2].textContent = name;
@@ -175,6 +166,14 @@ document.addEventListener('DOMContentLoaded', function () {
         };
 
         return JSON.stringify(formData); // Повертаємо рядок JSON зі зібраними даними
+    }
+    // Функція для форматування дати у вказаний формат
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const day = date.getDate().toString().padStart(2, '0'); // Додаємо нуль спереду, якщо число менше 10
+        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Місяці в JavaScript починаються з 0
+        const year = date.getFullYear();
+        return `${day}.${month}.${year}`;
     }
     function ClearModalField() {
         formFields.forEach(field => field.value = '');
