@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const deleteConfirmationModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
     const confirmDeleteStudentBtn = document.getElementById('confirmDeleteStudent');
 
+    let isFormValid = false;
     let editingMode = false;
     let editedRowIndex = null;
     let rowToDelete = null; // Зберігаємо посилання на запис, який користувач хоче видалити
@@ -77,6 +78,9 @@ document.addEventListener('DOMContentLoaded', function () {
             alert("Some information is missing! Please, fill all the fields.");
             return;
         }
+        // Створюємо рядок даних з форми
+        const formData = createFormData();
+        console.log(formData); // Виводимо рядок даних в консоль (для тестування)
         // Змінні для збереження нових даних студента
         const group = groupSelect.options[groupSelect.selectedIndex].text;
         const name = nameInput.value;
@@ -96,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
             <td>${gender}</td>
             <td>${birthdate}</td>
             <td>${icon}</td>
-            <td><i class="bi bi-pencil-square"></i><i class="bi bi-x-square"></i></td>
+            <td><i class="bi bi-pencil-square Icon"></i><i class="bi bi-x-square Icon"></i></td>
         `;
             tableBody.appendChild(newRow);
             ClearModalField();
@@ -161,6 +165,17 @@ document.addEventListener('DOMContentLoaded', function () {
             editedRowIndex = Array.from(row.parentNode.children).indexOf(row);
         }
     });
+    function createFormData() {
+        const formData = {
+            group: groupSelect.value,
+            name: nameInput.value,
+            gender: genderSelect.value === 'male' ? 'M' : 'F',
+            birthdate: formatDate(birthdateInput.value),
+            status: activeRadio.checked ? 'Active' : 'Inactive'
+        };
+
+        return JSON.stringify(formData); // Повертаємо рядок JSON зі зібраними даними
+    }
     function ClearModalField() {
         formFields.forEach(field => field.value = '');
     }

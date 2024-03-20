@@ -211,6 +211,13 @@ table {
     position: relative;
     top: 5px;
 }
+.Icon {
+    transition: color 0.3s; /* Додаємо плавний перехід для зміни кольору */
+}
+
+.Icon:hover {
+    color: blue; /* Змінюємо колір насичення при наведенні курсору */
+}
 
 .bi-circle-fill {
     font-size: 30px;
@@ -266,6 +273,9 @@ table {
 }
 .bi-plus-square{
     font-size: 30px;
+    display: block; /* Встановлюємо блочний вигляд для елемента */
+    float: right; /* Розміщуємо елемент справа */
+    margin-right: 3%;
 }
 .no-decoration {
     text-decoration: none;
@@ -285,6 +295,7 @@ table {
 .burger-menu{
     display: none;
 }
+
 .bi-list{
     font-size: 28px;
 }
@@ -316,6 +327,9 @@ table {
     }
     .sidebar{
         display: none;
+    }
+    .bi-plus-square{
+        margin-right: 8%;
     }
 }
 
