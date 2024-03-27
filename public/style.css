@@ -317,6 +317,10 @@ table {
 .form-group{
     margin: 15px;
 }
+.alert-msg{
+    color: red;
+    display: none;
+}
 @media screen and (max-width: 1200px) {
     .table-container{
         width: 90%;
