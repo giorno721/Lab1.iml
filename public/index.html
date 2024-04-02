@@ -56,12 +56,18 @@
       <li class="nav-item"><a class="nav-link" href="Tasks.html">Tasks</a></li>
     </ul>
   </nav>
+  <div class="content">
   <span class="header-students">Students</span>
   <br>
-  <i class="bi bi-circle bi-plus-square Icon"  data-bs-toggle="modal" data-bs-target="#AddStudentModalWindow"></i>
-  <br>
+    <div class="text-end">
+      <button class="btn btn-icon bi bi-plus-square addOrEdit" data-id="">
+        <i class="Icon"></i>
+      </button>
+    </div>
+
+    <br>
   <div class="table-container">
-    <table class="content-table">
+    <table id="studentsTable" class="content-table">
       <caption>
       </caption>
       <thead>
@@ -79,6 +85,7 @@
       <tbody>
       </tbody>
     </table>
+  </div>
   </div>
 </main>
 <br><br>
@@ -102,6 +109,7 @@
 <div class="modal fade" id="AddStudentModalWindow" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
+      <form id="myForm">
       <div class="modal-header">
         <h5 class="modal-title" id="ModalTitle">Add student</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -111,13 +119,13 @@
       <div class="modal-body">
         <input type = hidden id="studentId" name="id">
         <div class="form-group">
-          <label for="groupSelect">Group</label>
-          <select class="form-select" id="groupSelect">
-            <option value="" disabled selected hidden>Select the group</option>
-            <option value="1">PZ-21</option>
-            <option  value="2">PZ-25</option>
-          </select>
-        </div>
+        <label for="groupSelect">Group</label>
+        <select class="form-select" id="groupSelect">
+          <option value="" disabled selected hidden>Select the group</option>
+          <option value="1">PZ-21</option>
+          <option  value="2">PZ-25</option>
+        </select>
+      </div>
         <div class="form-group">
           <label for="nameInput">Name</label>
           <input type="text" class="form-control" id="nameInput" placeholder="Surname and name">
@@ -134,29 +142,19 @@
           <label for="birthdateInput">Birth date</label>
           <input type="date" class="form-control" id="birthdateInput">
         </div>
-        <div class="form-group">
-          <label>Статус</label>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="statusRadio" id="activeRadio" value="active" checked>
-            <label class="form-check-label" for="activeRadio">
-              Active
-            </label>
+          <div class="form-group">
+            <label for="status" class="col-sm-3 col-form-label">Status</label>
+            <div class="col-sm-1">
+              <input type="checkbox" id="status">
+            </div>
           </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="statusRadio" id="inactiveRadio" value="inactive">
-            <label class="form-check-label" for="inactiveRadio">
-              Inactive
-            </label>
-          </div>
-          <br>
-          <div class="alert-msg">Some information is missing! Please, fill all the fields.</div>
-      </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnClose">Close</button>
-        <button type="button" class="btn btn-primary" id="btnAddStudent">Add</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button id="submitButton" class="btn btn-primary confirm-btn" type="submit">OK</button>
       </div>
-    </div>
+    </form>
+  </div>
   </div>
 </div>
 <div class="modal fade show" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true" role="dialog">
@@ -166,7 +164,8 @@
         <h5 class="modal-title" id="deleteConfirmationModalLabel">Delete confirmation</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
+      <input hidden id="idOfDelete">
+      <div class="modal-body" id="messageForDelete">
         <p id="deleteConfirmationText">Are you sure you want to delete the student?</p>
       </div>
       <div class="modal-footer">
@@ -176,10 +175,12 @@
     </div>
   </div>
 </div>
+
 </body>
 
 <script src="jsCode.js"></script>
 <script src="app.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>  <link rel="stylesheet" type="text/css" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="style.css">
 
 </html>
