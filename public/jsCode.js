@@ -18,22 +18,35 @@ let Student = function () {
     this.name = "";
     this.gender = "";
     this.birthday = "";
-    this.status = false;
 }
 
 document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("myForm").addEventListener("submit", function(event) {
         event.preventDefault();
+
+        let groupId = document.getElementById("groupSelect").value;
+        let name = document.getElementById("nameInput").value;
+        let gender = document.getElementById("genderSelect").value;
+        let birthdate = document.getElementById("birthdateInput").value;
+        const alertMsg = document.querySelector('.alert-msg');
+
+        // Перевірка, чи всі поля заповнені
+        if (!groupId || !name || !gender || !birthdate) {
+            alertMsg.style.display = 'initial';
+            return; // Припинення відправлення форми
+        }
+
         let student = new Student();
         student.id = document.getElementById("studentId").value;
-        student.group = document.getElementById("groupSelect").value;
-        student.name = document.getElementById("nameInput").value;
-        student.gender = document.getElementById("genderSelect").value;
-        student.birthday = document.getElementById("birthdateInput").value;
-        student.status = !!document.getElementById("status").checked;
+        student.group = groupId;
+        student.name = name;
+        student.gender = gender;
+        student.birthday = birthdate;
+        const statusRadio = document.querySelector('input[name="statusRadio"]:checked');
+        student.status = statusRadio ? statusRadio.value === 'active' : false;
 
-        let jsonString = JSON.stringify(student);
-        console.log(jsonString);
+        const formDate = createFormData(student);
+        console.log(formDate);
 
         if(student.id){
             editStudent(student);
@@ -43,6 +56,7 @@ document.addEventListener("DOMContentLoaded", function() {
             addStudent(student);
         }
         let modal = bootstrap.Modal.getInstance(document.getElementById("AddStudentModalWindow"));
+        alertMsg.style.display = 'none';
         modal.hide();
 
     });
@@ -66,28 +80,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
 });
 
-function transformDateFormat(dateString) {
-    let dateObject = new Date(dateString);
-
-    let day = dateObject.getDate();
-    let month = dateObject.getMonth() + 1;
-    let year = dateObject.getFullYear();
-
-    // Format the date in "DD.MM.YYYY" format
-    return `${day < 10 ? '0' + day : day}.${month < 10 ? '0' + month : month}.${year}`;
-}
-function transformDateFormatToISO(dateString) {
-    let parts = dateString.split('.');
-
-    return parts[2] + '-' + parts[1].padStart(2, '0') + '-' + parts[0].padStart(2, '0');
-}
 function updateModal(student) {
     document.getElementById("studentId").value = student.id ? student.id : "";
-    document.getElementById("groupSelect").value = student.group ;
+    document.getElementById("groupSelect").value = student.group;
     document.getElementById("nameInput").value = student.name;
     document.getElementById("genderSelect").value = student.gender;
-    document.getElementById("birthdateInput").value = student.birthday ? transformDateFormatToISO(student.birthday) : "";
-    document.getElementById("status").checked = student.status;
+    document.getElementById("birthdateInput").value = student.birthday ? formatDateToISO(student.birthday) : "";
+    const statusRadio = document.getElementById("statusRadio");
+    if (statusRadio) {
+        statusRadio.checked = student.status;
+    }
 }
 function getRowByDataAttribute(attributeName, attributeValue) {
     const table = document.getElementById('studentsTable');
@@ -111,12 +113,14 @@ function editStudent(student){
     cols[2].textContent = student.name;
     cols[3].setAttribute("data-value", student.gender);
     cols[3].textContent = document.querySelector('#genderSelect option[value="' + student.gender + '"]').textContent;
-    cols[4].textContent = transformDateFormat(student.birthday);
-    if(student.status){
-        cols[5].innerHTML ='<i class="bi bi-circle-fill" id="icon-active"></i>'
-    }else {
-        cols[5].innerHTML ='<i class="bi bi-circle-fill" id="icon"></i>'
+    cols[4].textContent = formatDate(student.birthday);
+    cols[5].innerHTML = student.status ? '<i class="bi bi-circle-fill" id="icon-active"></i>' : '<i class="bi bi-circle-fill" id="icon"></i>';
+    // Отримання радіокнопки для статусу
+    const statusRadio = document.getElementById("statusRadio");
+    if (statusRadio) {
+        statusRadio.checked = student.status;
     }
+
 }
 let openMainModal = function (button) {
     let student = new Student();
@@ -136,8 +140,10 @@ let openMainModal = function (button) {
         student.name = columns[2].textContent;
         student.gender = columns[3].getAttribute("data-value");
         student.birthday = columns[4].textContent;
-        student.status = isActive;
-
+        // Отримати значення радіокнопки для статусу
+        const statusColumn = columns[5];
+        const statusText = statusColumn.textContent.trim().toLowerCase();
+        student.status = statusText === 'active';
     }
     updateModal(student);
     document.getElementById("ModalTitle").innerText = title;
@@ -146,6 +152,29 @@ let openMainModal = function (button) {
 
     modal.show();
 
+}
+function createFormData(student) {
+    const formData = {
+        id : parseInt(student.id),
+        group : parseInt(student.group),
+        name : student.name,
+        gender : parseInt(student.gender),
+        birthdate:  formatDate(student.birthday),
+        status: student.status ? 'True' : 'False'
+    }
+    return JSON.stringify(formData);
+}
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0'); // Додаємо нуль спереду, якщо число менше 10
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Місяці в JavaScript починаються з 0
+    const year = date.getFullYear();
+    return `${day}.${month}.${year}`;
+}
+function formatDateToISO(dateString) {
+    let parts = dateString.split('.');
+
+    return parts[2] + '-' + parts[1].padStart(2, '0') + '-' + parts[0].padStart(2, '0');
 }
 function openWarningModel(button){
     let tr = button.closest('tr');
@@ -158,34 +187,26 @@ function openWarningModel(button){
     modal.show();
 }
 function addStudent(student) {
-    let status;
-    if(student.status) {
-        status = '<i class="bi bi-circle-fill" id="icon-active"></i>';
-    }else {
-        status = '<i class="bi bi-circle-fill" id="icon"></i>';
-    }
     const newRow = document.createElement('tr');
-    newRow.setAttribute("data-id",student.id);
-    newRow.innerHTML =
-        `<td><input type="checkbox" class="table-input"></td>
-                    <td data-value = "${student.group}">${document.querySelector('#groupSelect option[value="' + student.group + '"]').textContent}</td>
-                    <td>${student.name}</td>
-                    <td data-value="${student.gender}">${document.querySelector('#genderSelect option[value="' + student.gender + '"]').textContent}</td>
-                    <td>${transformDateFormat(student.birthday)}</td>
-                    <td>
-                        ${status}
-                    <td>
-                        <div class="d-flex justify-content-center">
-                            <button  class="btn addOrEdit" data-id="${student.id}">
-                                <i class="bi bi-pencil-square edit-btn close-btn table-icons"></i>
-                            </button>
-                            <button  class="btn deleteRow" data-id="${student.id}">
-                               <i class="bi bi-x-square"></i></i>
-                            </button>
-                        </div>
-                    </td>
-          `;
+    newRow.setAttribute("data-id", student.id);
+    newRow.innerHTML = `
+        <td><input type="checkbox" class="table-input"></td>
+        <td data-value="${student.group}">${document.querySelector('#groupSelect option[value="' + student.group + '"]').textContent}</td>
+        <td>${student.name}</td>
+        <td data-value="${student.gender}">${document.querySelector('#genderSelect option[value="' + student.gender + '"]').textContent}</td>
+        <td>${formatDate(student.birthday)}</td>
+        <td>${student.status ? '<i class="bi bi-circle-fill" id="icon-active"></i>' : '<i class="bi bi-circle-fill" id="icon"></i>'}</td>
+        <td>
+            <div class="d-flex justify-content-center">
+                <button class="btn addOrEdit" data-id="${student.id}">
+                    <i class="bi bi-pencil-square edit-btn close-btn table-icons"></i>
+                </button>
+                <button class="btn deleteRow" data-id="${student.id}">
+                    <i class="bi bi-x-square delete-btn close-btn table-icons"></i>
+                </button>
+            </div>
+        </td>
+    `;
 
-    document.getElementById('studentsTable').getElementsByTagName('tbody')[0].appendChild(
-        newRow);
+    document.getElementById('studentsTable').getElementsByTagName('tbody')[0].appendChild(newRow);
 }
