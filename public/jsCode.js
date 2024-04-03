@@ -11,29 +11,40 @@ document.querySelector('.burger-menu').addEventListener('click', function() {
     document.querySelector('.sidebar').classList.toggle('open');
 });
 
-let freeID = 0;
+let stdId = 0;
 let Student = function () {
     this.id = null;
     this.group = "";
     this.name = "";
     this.gender = "";
     this.birthday = "";
+    this.status = null;
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("myForm").addEventListener("submit", function(event) {
+
+    const alertMsg = document.querySelector('.alert-msg');
+
+    document.querySelector('.modal-header .close').addEventListener('click', function() {
+        let modal = bootstrap.Modal.getInstance(document.getElementById("AddStudentModalWindow"));
+        alertMsg.style.display = 'none';
+        modal.hide();
+    });
+
+    document.getElementById("AddEditForm").addEventListener("submit", function(event) {
         event.preventDefault();
+
+        const statusRadio = document.querySelector('input[name="statusRadio"]:checked');
 
         let groupId = document.getElementById("groupSelect").value;
         let name = document.getElementById("nameInput").value;
         let gender = document.getElementById("genderSelect").value;
         let birthdate = document.getElementById("birthdateInput").value;
-        const alertMsg = document.querySelector('.alert-msg');
+        const status = statusRadio ? statusRadio.value : '';
 
-        // Перевірка, чи всі поля заповнені
-        if (!groupId || !name || !gender || !birthdate) {
+        if (!groupId || !name || !gender || !birthdate || !status) {
             alertMsg.style.display = 'initial';
-            return; // Припинення відправлення форми
+            return;
         }
 
         let student = new Student();
@@ -42,7 +53,6 @@ document.addEventListener("DOMContentLoaded", function() {
         student.name = name;
         student.gender = gender;
         student.birthday = birthdate;
-        const statusRadio = document.querySelector('input[name="statusRadio"]:checked');
         student.status = statusRadio ? statusRadio.value === 'active' : false;
 
         const formDate = createFormData(student);
@@ -51,8 +61,8 @@ document.addEventListener("DOMContentLoaded", function() {
         if(student.id){
             editStudent(student);
         }else{
-            student.id=freeID;
-            freeID++;
+            student.id=stdId;
+            stdId++;
             addStudent(student);
         }
         let modal = bootstrap.Modal.getInstance(document.getElementById("AddStudentModalWindow"));
@@ -62,8 +72,16 @@ document.addEventListener("DOMContentLoaded", function() {
     });
     document.getElementById("confirmDeleteStudent").addEventListener('click',function (){
         const id = document.getElementById("idOfDelete").value;
-        const row = getRowByDataAttribute('data-id', id);
-        row.parentNode.removeChild(row);
+        const table = document.getElementById('studentsTable');
+        const rows = table.getElementsByTagName('tr');
+        let rowToDelete;
+        for (let i = 0; i < rows.length; i++) {
+            const row = rows[i];
+            if (row.getAttribute('data-id')==id) {
+                rowToDelete = row;
+            }
+        }
+        rowToDelete.parentNode.removeChild(rowToDelete);
         let modal = bootstrap.Modal.getInstance(document.getElementById("deleteConfirmationModal"));
 
         modal.hide();
@@ -73,40 +91,65 @@ document.addEventListener("DOMContentLoaded", function() {
             openMainModal(event.target.closest("button"));
         }
         if (event.target.closest("button")?.classList.contains('deleteRow')) {
-            openWarningModel(event.target.closest("button"));
+            openWarningModal(event.target.closest("button"));
         }
     });
 
 
 });
 
-function updateModal(student) {
+function fillModalWindow(student) {
     document.getElementById("studentId").value = student.id ? student.id : "";
     document.getElementById("groupSelect").value = student.group;
     document.getElementById("nameInput").value = student.name;
     document.getElementById("genderSelect").value = student.gender;
     document.getElementById("birthdateInput").value = student.birthday ? formatDateToISO(student.birthday) : "";
-    const statusRadio = document.getElementById("statusRadio");
-    if (statusRadio) {
-        statusRadio.checked = student.status;
+
+    const activeRadio = document.getElementById("activeRadio");
+    const inactiveRadio = document.getElementById("inactiveRadio");
+
+    if (student.status === true) {
+        activeRadio.checked = true; // Встановлюємо активний статус
+    } else if (student.status === false) {
+        inactiveRadio.checked = true; // Встановлюємо неактивний статус
+    } else {
+        // Якщо статус є null, не відзначаємо жодну радіокнопку
+        activeRadio.checked = false;
+        inactiveRadio.checked = false;
     }
 }
-function getRowByDataAttribute(attributeName, attributeValue) {
-    const table = document.getElementById('studentsTable');
-    const rows = table.getElementsByTagName('tr');
-    for (let i = 0; i < rows.length; i++) {
-        const row = rows[i];
-        if (row.getAttribute(attributeName)==attributeValue) {
-            return row;
-        }
-    }
+function addStudent(student) {
+    const newRow = document.createElement('tr');
+    newRow.setAttribute("data-id", student.id);
+    newRow.innerHTML = `
+        <td><input type="checkbox" class="table-input"></td>
+        <td data-value="${student.group}">${document.querySelector('#groupSelect option[value="' + student.group + '"]').textContent}</td>
+        <td>${student.name}</td>
+        <td data-value="${student.gender}">${document.querySelector('#genderSelect option[value="' + student.gender + '"]').textContent}</td>
+        <td>${formatDate(student.birthday)}</td>
+        <td>${student.status ? '<i class="bi bi-circle-fill" id="icon-active"></i>' : '<i class="bi bi-circle-fill" id="icon"></i>'}</td>
+        <td>
+         <button class="btn btn-xs addOrEdit" data-id="${student.id}"><i class="bi bi-pencil-square Icon"></i> </button>
+         <button class="btn btn-xs deleteRow" data-id="${student.id}"><i class="bi bi-x-square Icon"></i></button>
+         </td>
 
-    return null;
+    `;
+
+    document.getElementById('studentsTable').getElementsByTagName('tbody')[0].appendChild(newRow);
 }
 
 function editStudent(student){
-    const row = getRowByDataAttribute('data-id', student.id);
-    const cols = row.querySelectorAll('td');
+    const table = document.getElementById('studentsTable');
+    const rows = table.getElementsByTagName('tr');
+    let rowToEdit;
+
+    for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
+        if (row.getAttribute('data-id')== student.id) {
+            rowToEdit = row;
+        }
+    }
+    const cols = rowToEdit.querySelectorAll('td');
 
     cols[1].setAttribute("data-value", student.group);
     cols[1].textContent = document.querySelector('#groupSelect option[value="' + student.group + '"]').textContent;
@@ -115,13 +158,9 @@ function editStudent(student){
     cols[3].textContent = document.querySelector('#genderSelect option[value="' + student.gender + '"]').textContent;
     cols[4].textContent = formatDate(student.birthday);
     cols[5].innerHTML = student.status ? '<i class="bi bi-circle-fill" id="icon-active"></i>' : '<i class="bi bi-circle-fill" id="icon"></i>';
-    // Отримання радіокнопки для статусу
-    const statusRadio = document.getElementById("statusRadio");
-    if (statusRadio) {
-        statusRadio.checked = student.status;
-    }
 
 }
+
 let openMainModal = function (button) {
     let student = new Student();
     let title = "Add student";
@@ -129,27 +168,20 @@ let openMainModal = function (button) {
         title = "Edit student";
         let tr = button.closest('tr');
         let columns = tr.querySelectorAll('td');
-        let isActive;
-        columns.forEach(column => {
-            if(column.querySelector('i.status')){
-                isActive =column.querySelector('i.status').classList.contains('active');
-            }
-        });
         student.id = tr.getAttribute("data-id");
         student.group = columns[1].getAttribute("data-value");
         student.name = columns[2].textContent;
         student.gender = columns[3].getAttribute("data-value");
         student.birthday = columns[4].textContent;
-        // Отримати значення радіокнопки для статусу
-        const statusColumn = columns[5];
-        const statusText = statusColumn.textContent.trim().toLowerCase();
-        student.status = statusText === 'active';
+        // Check for active status icon and set student.status accordingly
+        const statusCell = columns[5];
+        const isActiveIcon = statusCell.querySelector('i.bi.bi-circle-fill#icon-active');
+        student.status = isActiveIcon !== null; // Set true if icon exists, false otherwise
     }
-    updateModal(student);
+    fillModalWindow(student);
     document.getElementById("ModalTitle").innerText = title;
 
     let modal = new bootstrap.Modal(document.getElementById('AddStudentModalWindow'));
-
     modal.show();
 
 }
@@ -176,7 +208,7 @@ function formatDateToISO(dateString) {
 
     return parts[2] + '-' + parts[1].padStart(2, '0') + '-' + parts[0].padStart(2, '0');
 }
-function openWarningModel(button){
+function openWarningModal(button){
     let tr = button.closest('tr');
     let columns = tr.querySelectorAll('td');
     let name = columns[2].textContent.trim();
@@ -185,28 +217,4 @@ function openWarningModel(button){
     let modal = new bootstrap.Modal(document.getElementById("deleteConfirmationModal"));
 
     modal.show();
-}
-function addStudent(student) {
-    const newRow = document.createElement('tr');
-    newRow.setAttribute("data-id", student.id);
-    newRow.innerHTML = `
-        <td><input type="checkbox" class="table-input"></td>
-        <td data-value="${student.group}">${document.querySelector('#groupSelect option[value="' + student.group + '"]').textContent}</td>
-        <td>${student.name}</td>
-        <td data-value="${student.gender}">${document.querySelector('#genderSelect option[value="' + student.gender + '"]').textContent}</td>
-        <td>${formatDate(student.birthday)}</td>
-        <td>${student.status ? '<i class="bi bi-circle-fill" id="icon-active"></i>' : '<i class="bi bi-circle-fill" id="icon"></i>'}</td>
-        <td>
-            <div class="d-flex justify-content-center">
-                <button class="btn addOrEdit" data-id="${student.id}">
-                    <i class="bi bi-pencil-square edit-btn close-btn table-icons"></i>
-                </button>
-                <button class="btn deleteRow" data-id="${student.id}">
-                    <i class="bi bi-x-square delete-btn close-btn table-icons"></i>
-                </button>
-            </div>
-        </td>
-    `;
-
-    document.getElementById('studentsTable').getElementsByTagName('tbody')[0].appendChild(newRow);
 }
