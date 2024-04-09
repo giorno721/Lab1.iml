@@ -11,15 +11,31 @@ document.querySelector('.burger-menu').addEventListener('click', function() {
     document.querySelector('.sidebar').classList.toggle('open');
 });
 
+
+document.querySelector('.content').addEventListener('click', function(event) {
+    const addOrEditButton = event.target.closest("button.addOrEdit");
+    if (addOrEditButton) {
+        openAddEditModalWindow(addOrEditButton);
+    }
+});
+
+document.querySelector('.content').addEventListener('click', function(event) {
+    const deleteRowButton = event.target.closest("button.deleteRow");
+    if (deleteRowButton) {
+        openWarningModalWindow(deleteRowButton);
+    }
+});
 let stdId = 0;
-let Student = function () {
-    this.id = null;
-    this.group = "";
-    this.name = "";
-    this.gender = "";
-    this.birthday = "";
-    this.status = null;
-}
+
+let Student = {
+    id: null,
+    group: "",
+    firstName: "",
+    lastName: "",
+    gender: "",
+    birthday: "",
+    status: false,
+};
 
 document.addEventListener("DOMContentLoaded", function() {
 
@@ -33,24 +49,25 @@ document.addEventListener("DOMContentLoaded", function() {
 
     document.getElementById("AddEditForm").addEventListener("submit", function(event) {
         event.preventDefault();
-
         const statusRadio = document.querySelector('input[name="statusRadio"]:checked');
 
         let groupId = document.getElementById("groupSelect").value;
-        let name = document.getElementById("nameInput").value;
+        let name = document.getElementById("firstName").value;
+        let surname = document.getElementById("lastName").value;
         let gender = document.getElementById("genderSelect").value;
         let birthdate = document.getElementById("birthdateInput").value;
         const status = statusRadio ? statusRadio.value : '';
 
-        if (!groupId || !name || !gender || !birthdate || !status) {
+        if (!groupId || !name || !surname || !gender || !birthdate || !status) {
             alertMsg.style.display = 'initial';
             return;
         }
 
-        let student = new Student();
+        let student = Object.assign({}, Student);
         student.id = document.getElementById("studentId").value;
         student.group = groupId;
-        student.name = name;
+        student.firstName = name;
+        student.lastName = surname;
         student.gender = gender;
         student.birthday = birthdate;
         student.status = statusRadio ? statusRadio.value === 'active' : false;
@@ -86,22 +103,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
         modal.hide();
     });
-    document.querySelector('.content').addEventListener('click', function (event) {
-        if (event.target.closest("button")?.classList.contains('addOrEdit')){
-            openMainModal(event.target.closest("button"));
-        }
-        if (event.target.closest("button")?.classList.contains('deleteRow')) {
-            openWarningModal(event.target.closest("button"));
-        }
-    });
-
-
 });
 
 function fillModalWindow(student) {
     document.getElementById("studentId").value = student.id ? student.id : "";
     document.getElementById("groupSelect").value = student.group;
-    document.getElementById("nameInput").value = student.name;
+    document.getElementById("firstName").value = student.firstName;
+    document.getElementById("lastName").value = student.lastName;
     document.getElementById("genderSelect").value = student.gender;
     document.getElementById("birthdateInput").value = student.birthday ? formatDateToISO(student.birthday) : "";
 
@@ -113,7 +121,6 @@ function fillModalWindow(student) {
     } else if (student.status === false) {
         inactiveRadio.checked = true; // Встановлюємо неактивний статус
     } else {
-        // Якщо статус є null, не відзначаємо жодну радіокнопку
         activeRadio.checked = false;
         inactiveRadio.checked = false;
     }
@@ -121,10 +128,12 @@ function fillModalWindow(student) {
 function addStudent(student) {
     const newRow = document.createElement('tr');
     newRow.setAttribute("data-id", student.id);
+    newRow.setAttribute("data-firstName", student.firstName);
+    newRow.setAttribute("data-lastName", student.lastName);
     newRow.innerHTML = `
         <td><input type="checkbox" class="table-input"></td>
         <td data-value="${student.group}">${document.querySelector('#groupSelect option[value="' + student.group + '"]').textContent}</td>
-        <td>${student.name}</td>
+        <td>${student.firstName+" "+student.lastName}</td>
         <td data-value="${student.gender}">${document.querySelector('#genderSelect option[value="' + student.gender + '"]').textContent}</td>
         <td>${formatDate(student.birthday)}</td>
         <td>${student.status ? '<i class="bi bi-circle-fill" id="icon-active"></i>' : '<i class="bi bi-circle-fill" id="icon"></i>'}</td>
@@ -134,7 +143,6 @@ function addStudent(student) {
          </td>
 
     `;
-
     document.getElementById('studentsTable').getElementsByTagName('tbody')[0].appendChild(newRow);
 }
 
@@ -153,7 +161,9 @@ function editStudent(student){
 
     cols[1].setAttribute("data-value", student.group);
     cols[1].textContent = document.querySelector('#groupSelect option[value="' + student.group + '"]').textContent;
-    cols[2].textContent = student.name;
+    cols[2].textContent = student.firstName + " " + student.lastName;
+    rowToEdit.setAttribute("data-firstName", student.firstName);
+    rowToEdit.setAttribute("data-lastName", student.lastName);
     cols[3].setAttribute("data-value", student.gender);
     cols[3].textContent = document.querySelector('#genderSelect option[value="' + student.gender + '"]').textContent;
     cols[4].textContent = formatDate(student.birthday);
@@ -161,8 +171,8 @@ function editStudent(student){
 
 }
 
-let openMainModal = function (button) {
-    let student = new Student();
+let openAddEditModalWindow = function (button) {
+    let student = Object.assign({}, Student);
     let title = "Add student";
     if (button.getAttribute("data-id") !== "") {
         title = "Edit student";
@@ -170,7 +180,8 @@ let openMainModal = function (button) {
         let columns = tr.querySelectorAll('td');
         student.id = tr.getAttribute("data-id");
         student.group = columns[1].getAttribute("data-value");
-        student.name = columns[2].textContent;
+        student.firstName = tr.getAttribute("data-firstName");
+        student.lastName = tr.getAttribute("data-lastName");
         student.gender = columns[3].getAttribute("data-value");
         student.birthday = columns[4].textContent;
         // Check for active status icon and set student.status accordingly
@@ -189,7 +200,8 @@ function createFormData(student) {
     const formData = {
         id : parseInt(student.id),
         group : parseInt(student.group),
-        name : student.name,
+        firstName : student.firstName,
+        lastName : student.lastName,
         gender : parseInt(student.gender),
         birthdate:  formatDate(student.birthday),
         status: student.status ? 'True' : 'False'
@@ -208,7 +220,7 @@ function formatDateToISO(dateString) {
 
     return parts[2] + '-' + parts[1].padStart(2, '0') + '-' + parts[0].padStart(2, '0');
 }
-function openWarningModal(button){
+function openWarningModalWindow(button){
     let tr = button.closest('tr');
     let columns = tr.querySelectorAll('td');
     let name = columns[2].textContent.trim();
